@@ -1,0 +1,22 @@
+language:
+- cpp
+before_install:
+- pip install --user cpp-coveralls
+addons:
+  sonarcloud:
+    organization: nouname-github
+    token:
+      secure: LY8cRwTylOJ+p0aHdcCCFHT61Yd9INYmxHVfWN9qYQsO/YJoC9Yho99UcR5YyVQAfZKeCvZhhX6enYDEplFB36Oir24NfxOABE2Z7NkjyPBmsoAJhR0u78OKJkfD7dV4qe0DFcY1b9D3BU4/VeU5L038si3tYst2TMfBPbCuy80RUVPdrdiksPWynM0Ow2HYSqPaKEfLZ8RWZuzCpWM7x5qn2yIn/9pd+x70iprMFS6bnu0+5MZV9kIJtRI28NOJSgXwzwvPJvBa7K9y4Z6L020/2ybGtW+WCbn99aqqo90CkF/0b60yYmW1Kl3FZ1JcB9ITEsx39xDJvebECvjlndQD5LXYa3xeopvjX/kN1Wb9Jw36hWC0g9wqDseCCl8a/wMhTdrEMAV0Drp70+1zl2rlmYWirRSfS6V2b6VSqCEA+rhTZMW4LtcfCyWVeDHU7+ZtJ0TI//ybHhhBiFO13kFL54cAMtGzwTDjsMncajv96Q9ag7R24SL3YLA26pFwYSvFifQ+sjQm2v2vHqNbOr4uFUkWPdcGgU+z8xRH+GEe+RFacPyu1xDNUmS4poIEp8msYkERu8FGdb41ZTmZy3ohg7nSDaieyNBFBozUCN/oQP7l73BZ9a+fCW8x3fxEADSviN4leB+Rvqer9zPkz7BTkWowfOGNEfmQpy1blOw=
+script:
+- qmake
+- make
+- "./tests/tests"
+after_success:
+- coveralls --root . -E ".*external.*" -E ".*tests.*"
+- build-wrapper-linux-x86-64 --out-dir bw-output make clean all
+- sonar-scanner -D"sonar.projectKey=nouname_lab1" -D"sonar.organization=nouname-github"
+  -D"sonar.sources=." -D"sonar.cfamily.build-wrapper-output=bw-output" -D"sonar.host.url=https://sonarcloud.io"
+  -D"sonar.login=b05cccf1bac7323208c22a5c90501a86c081cac8"
+cache:
+  directories:
+  - "$HOME/.sonar/cache"
