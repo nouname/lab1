@@ -11,7 +11,7 @@ script:
 - qmake
 - make
 - "./tests/tests"
-- locate sonar-scanner
+- whereis -b sonar-scanner
 after_success:
 - coveralls --root . -E ".*external.*" -E ".*tests.*"
 - build-wrapper-linux-x86-64 --out-dir bw-output make clean all
